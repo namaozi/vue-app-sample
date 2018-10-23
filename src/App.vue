@@ -6,19 +6,29 @@
 </template>
 
 <script>
-import Home from './components/Home.vue';
-import Editor from './components/Editor.vue';
+  import Home from './components/Home.vue';
+  import Editor from './components/Editor.vue';
 
-export default {
-  name: 'app',
-  data () {
-    return {
-      isLogin: false,
+  import firebase from 'firebase';
+
+  export default {
+    name: 'app',
+    data() {
+      return {
+        isLogin: false,
+      }
+    },
+    created: function () {
+      firebase
+        .auth()
+        .onAuthStateChanged(user => {
+           console.log(user);
+           this.isLogin = !!user; // truthy
+        });
+    },
+    components: {
+      Home: Home,
+      Editor: Editor,
     }
-  },
-  components: {
-    Home: Home,
-    Editor: Editor,
   }
-}
 </script>
