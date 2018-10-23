@@ -2,6 +2,7 @@
   <div id="editor">
     <h1>エディタ</h1>
     <span>{{ user.displayName }}</span>
+    <button @click="logout">ログアウト</button>
   </div>
 </template>
 

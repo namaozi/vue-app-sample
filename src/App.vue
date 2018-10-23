@@ -2,7 +2,7 @@
   <div id="app">
     <Home v-if="!isLogin"></Home>
     <Editor v-if="isLogin" :user="userData"></Editor>
-    <Loading v-if="!isLogin"></Loading>
+    <Loading v-if="isLoading"></Loading>
   </div>
 </template>
 
@@ -17,16 +17,27 @@
     data() {
       return {
         isLogin: false,
+        isLoading: false,
         userData: null,
       }
     },
     created: function () {
-      firebase
-        .auth()
-        .onAuthStateChanged(user => {
-          this.isLogin = !!user; // truthy
-          this.userData = user || null;
-        });
+      this.authenticate();
+    },
+    methods: {
+      /**
+       * googleアカウントで認証する
+       * ログイン状態でなければログインボタンを出す
+       */
+      authenticate: function () {
+        this.isLoading = true;
+        firebase.auth().onAuthStateChanged(user => {
+            this.isLogin = !!user; // truthy
+            this.userData = user || null;
+            this.isLoading = false;
+          }
+        );
+      }
     },
     components: {
       Home: Home,
